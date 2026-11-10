@@ -31,7 +31,7 @@ from Software_FJ.servicios.base import Servicio
 from Software_FJ.servicios.concretos import AlquilerEquipo, Asesoria, ReservaSala
 
 # Parte 2 Santiago Rojas: clase abstracta Servicio y servicios especializados.
-# En el proyecto: Servicio va en servicios/base.py y el resto en servicios/concretos.py
+
  
 from abc import abstractmethod
 from decimal import Decimal, InvalidOperation
