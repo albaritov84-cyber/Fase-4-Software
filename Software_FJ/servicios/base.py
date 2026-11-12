@@ -1,5 +1,5 @@
-#Añadir aportes C
-# Clase abstracta Servicio: base de todos los servicios de Software FJ.
+#anexo por mi parte, Cristiam 
+#Clase abstracta Servicio: base de todos los servicios de Software FJ.
 
 from abc import abstractmethod
 from decimal import Decimal, InvalidOperation
