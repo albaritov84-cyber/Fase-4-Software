@@ -1,0 +1,191 @@
+2026-11-12 16:32:15,930 - INFO - ===== Inicio de la simulación =====
+2026-11-12 16:32:15,930 - INFO - Cliente registrado: Cliente #1: Ana Maria Lopez | Doc: 1053123456 | Correo: ana@correo.com | Tel: 3001234567
+2026-11-12 16:32:15,930 - INFO - Op 01 'Registrar cliente válido: Ana' OK
+2026-11-12 16:32:15,930 - INFO - Op 01 terminada
+2026-11-12 16:32:15,930 - INFO - Cliente registrado: Cliente #2: Carlos Ruiz | Doc: 80123456 | Correo: carlos@correo.com | Tel: 3105556677
+2026-11-12 16:32:15,930 - INFO - Op 02 'Registrar cliente válido: Carlos' OK
+2026-11-12 16:32:15,930 - INFO - Op 02 terminada
+2026-11-12 16:32:15,931 - INFO - Cliente registrado: Cliente #3: Luisa Gomez | Doc: 1020304050 | Correo: luisa@correo.com | Tel: 3201112233
+2026-11-12 16:32:15,931 - INFO - Op 03 'Registrar cliente válido: Luisa' OK
+2026-11-12 16:32:15,931 - INFO - Op 03 terminada
+2026-11-12 16:32:15,931 - INFO - Cliente registrado: Cliente #4: Maria Torres | Doc: 52123456 | Correo: maria@correo.com | Tel: 3157778899
+2026-11-12 16:32:15,931 - INFO - Op 04 'Registrar cliente válido: Maria' OK
+2026-11-12 16:32:15,931 - INFO - Op 04 terminada
+2026-11-12 16:32:15,931 - ERROR - Op 05 'Cliente con nombre demasiado corto' -> DatosInvalidosError: El nombre debe tener al menos 3 caracteres
+2026-11-12 16:32:15,931 - INFO - Op 05 terminada
+2026-11-12 16:32:15,931 - ERROR - Op 06 'Cliente con correo mal escrito' -> DatosInvalidosError: El correo no tiene un formato válido (pedro.correo.com)
+2026-11-12 16:32:15,931 - INFO - Op 06 terminada
+2026-11-12 16:32:15,931 - ERROR - Op 07 'Cliente con documento con letras' -> DatosInvalidosError: El documento debe contener solo números (12AB567)
+2026-11-12 16:32:15,932 - INFO - Op 07 terminada
+2026-11-12 16:32:15,932 - ERROR - Op 08 'Cliente creado con datos incompletos' -> ParametroFaltanteError: Falta el dato 'documento' para crear el cliente
+Traceback (most recent call last):
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\Software_FJ\modelos\cliente.py", line 36, in desde_diccionario
+    return cls(datos["nombre"], datos["documento"], datos["correo"], datos["telefono"])
+                                ~~~~~^^^^^^^^^^^^^
+KeyError: 'documento'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 68, in ejecutar
+    resultado = operacion()
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 148, in <lambda>
+    ejecutar("Cliente creado con datos incompletos", lambda: alta_cliente(
+                                                             ~~~~~~~~~~~~^
+        "x", lambda: Cliente.desde_diccionario({"nombre": "Pedro Perez"})))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 110, in alta_cliente
+    c = gestor.registrar_cliente(crear())
+                                 ~~~~~^^
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 149, in <lambda>
+    "x", lambda: Cliente.desde_diccionario({"nombre": "Pedro Perez"})))
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\Software_FJ\modelos\cliente.py", line 38, in desde_diccionario
+    raise ParametroFaltanteError(f"Falta el dato {e} para crear el cliente") from e
+Software_FJ.excepciones.ParametroFaltanteError: Falta el dato 'documento' para crear el cliente
+2026-11-12 16:32:15,936 - INFO - Op 08 terminada
+2026-11-12 16:32:15,936 - INFO - Servicio registrado: ReservaSala #8: Sala Ejecutiva | $50000/h | Sala para 10 personas
+2026-11-12 16:32:15,936 - INFO - Op 09 'Crear servicio válido: sala' OK
+2026-11-12 16:32:15,936 - INFO - Op 09 terminada
+2026-11-12 16:32:15,936 - INFO - Servicio registrado: AlquilerEquipo #9: Proyector 4K | $20000/h | Equipo: Proyector (seguro $15000)
+2026-11-12 16:32:15,937 - INFO - Op 10 'Crear servicio válido: equipo' OK
+2026-11-12 16:32:15,937 - INFO - Op 10 terminada
+2026-11-12 16:32:15,937 - INFO - Servicio registrado: Asesoria #10: Asesoría en Software | $80000/h | Especialidad: Desarrollo de software
+2026-11-12 16:32:15,937 - INFO - Op 11 'Crear servicio válido: asesoría' OK
+2026-11-12 16:32:15,937 - INFO - Op 11 terminada
+2026-11-12 16:32:15,937 - ERROR - Op 12 'Servicio con tarifa negativa' -> DatosInvalidosError: La tarifa por hora debe ser mayor a cero (-5000)
+2026-11-12 16:32:15,937 - INFO - Op 12 terminada
+2026-11-12 16:32:15,937 - ERROR - Op 13 'Servicio con tarifa que no es número' -> DatosInvalidosError: El campo 'tarifa_hora' debe ser numérico (mucho)
+Traceback (most recent call last):
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\Software_FJ\servicios\base.py", line 17, in _a_decimal
+    return Decimal(str(valor))
+decimal.InvalidOperation: [<class 'decimal.ConversionSyntax'>]
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 68, in ejecutar
+    resultado = operacion()
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 160, in <lambda>
+    ejecutar("Servicio con tarifa que no es número", lambda: alta_servicio(
+                                                             ~~~~~~~~~~~~~^
+        "x", lambda: AlquilerEquipo("Portátil", "mucho", "Portátil")))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 115, in alta_servicio
+    s = gestor.registrar_servicio(crear())
+                                  ~~~~~^^
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 161, in <lambda>
+    "x", lambda: AlquilerEquipo("Portátil", "mucho", "Portátil")))
+                 ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\Software_FJ\servicios\concretos.py", line 31, in __init__
+    super().__init__(nombre, tarifa_hora)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\Software_FJ\servicios\base.py", line 27, in __init__
+    tarifa = _a_decimal(tarifa_hora, "tarifa_hora")
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\Software_FJ\servicios\base.py", line 19, in _a_decimal
+    raise DatosInvalidosError(f"El campo '{campo}' debe ser numérico", detalle=valor) from e
+Software_FJ.excepciones.DatosInvalidosError: El campo 'tarifa_hora' debe ser numérico (mucho)
+2026-11-12 16:32:15,945 - INFO - Op 13 terminada
+2026-11-12 16:32:15,945 - ERROR - Op 14 'Sala con capacidad cero' -> DatosInvalidosError: La capacidad debe ser un entero positivo
+2026-11-12 16:32:15,946 - INFO - Op 14 terminada
+2026-11-12 16:32:15,946 - ERROR - Op 15 'Equipo sin tipo definido' -> ParametroFaltanteError: El tipo de equipo es obligatorio
+2026-11-12 16:32:15,946 - INFO - Op 15 terminada
+2026-11-12 16:32:15,946 - INFO - Reserva creada: Reserva #15: Ana Maria Lopez -> Sala Ejecutiva | 2 h | Pendiente
+2026-11-12 16:32:15,946 - INFO - Op 16 'Reserva de sala para Ana (2 h)' OK
+2026-11-12 16:32:15,946 - INFO - Op 16 terminada
+2026-11-12 16:32:15,946 - INFO - Reserva creada: Reserva #16: Carlos Ruiz -> Proyector 4K | 4 h | Pendiente
+2026-11-12 16:32:15,946 - INFO - Op 17 'Reserva de equipo para Carlos (4 h)' OK
+2026-11-12 16:32:15,946 - INFO - Op 17 terminada
+2026-11-12 16:32:15,946 - INFO - Reserva creada: Reserva #17: Luisa Gomez -> Asesoría en Software | 3 h | Pendiente
+2026-11-12 16:32:15,946 - INFO - Op 18 'Reserva de asesoría para Luisa (3 h)' OK
+2026-11-12 16:32:15,947 - INFO - Op 18 terminada
+2026-11-12 16:32:15,947 - INFO - Reserva #15 confirmada
+2026-11-12 16:32:15,947 - INFO - Reserva #15 procesada, costo total 107100.00
+2026-11-12 16:32:15,947 - INFO - Reserva #15 terminó el proceso en estado Confirmada
+2026-11-12 16:32:15,947 - INFO - Op 19 'Procesar reserva de Ana con IVA y 10% de descuento' OK
+2026-11-12 16:32:15,947 - INFO - Op 19 terminada
+2026-11-12 16:32:15,947 - INFO - Reserva #16 confirmada
+2026-11-12 16:32:15,947 - INFO - Reserva #16 procesada, costo total 95000.00
+2026-11-12 16:32:15,947 - INFO - Reserva #16 terminó el proceso en estado Confirmada
+2026-11-12 16:32:15,947 - INFO - Op 20 'Procesar reserva de Carlos sin impuestos' OK
+2026-11-12 16:32:15,947 - INFO - Op 20 terminada
+2026-11-12 16:32:15,947 - INFO - Reserva #17 cancelada
+2026-11-12 16:32:15,947 - INFO - Op 21 'Cancelar reserva de Luisa' OK
+2026-11-12 16:32:15,947 - INFO - Op 21 terminada
+2026-11-12 16:32:15,948 - ERROR - Op 22 'Cancelar de nuevo la misma reserva' -> OperacionNoPermitidaError: La reserva ya estaba cancelada
+2026-11-12 16:32:15,948 - INFO - Op 22 terminada
+2026-11-12 16:32:15,948 - ERROR - Op 23 'Reservar con un cliente que no existe' -> EntidadNoEncontradaError: No existe un cliente con id 9999
+2026-11-12 16:32:15,948 - INFO - Op 23 terminada
+2026-11-12 16:32:15,948 - ERROR - Op 24 'Reservar un servicio que no existe' -> EntidadNoEncontradaError: No existe un servicio con id 8888
+2026-11-12 16:32:15,948 - INFO - Op 24 terminada
+2026-11-12 16:32:15,948 - ERROR - Op 25 'Reservar sala por 20 horas (fuera de rango)' -> DatosInvalidosError: La duración debe estar entre 1 y 12 horas (20)
+2026-11-12 16:32:15,948 - INFO - Op 25 terminada
+2026-11-12 16:32:15,948 - ERROR - Op 26 'Ana intenta reservar otra vez la misma sala' -> ReservaConflictoError: Ana Maria Lopez ya tiene una reserva activa de 'Sala Ejecutiva'
+2026-11-12 16:32:15,948 - INFO - Op 26 terminada
+2026-11-12 16:32:15,949 - ERROR - Op 27 'Reservar un servicio deshabilitado' -> ReservaConflictoError: El servicio 'Asesoría en Software' no está disponible
+2026-11-12 16:32:15,949 - INFO - Op 27 terminada
+2026-11-12 16:32:15,949 - ERROR - Op 28: Fallo inesperado en 'Instanciar la clase abstracta Entidad'
+Traceback (most recent call last):
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 68, in ejecutar
+    resultado = operacion()
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 182, in <lambda>
+    ejecutar("Instanciar la clase abstracta Entidad", lambda: Entidad())
+                                                              ~~~~~~~^^
+TypeError: Can't instantiate abstract class Entidad without an implementation for abstract method 'describir'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 76, in ejecutar
+    raise Software_FJError(f"Fallo inesperado en '{descripcion}'") from e
+Software_FJ.excepciones.ProgramaFJError: Fallo inesperado en 'Instanciar la clase abstracta Entidad'
+2026-11-12 16:32:15,950 - INFO - Op 28 terminada
+2026-11-12 16:32:15,950 - ERROR - Op 29: Fallo inesperado en 'Instanciar la clase abstracta Servicio'
+Traceback (most recent call last):
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 68, in ejecutar
+    resultado = operacion()
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 183, in <lambda>
+    ejecutar("Instanciar la clase abstracta Servicio", lambda: Servicio("Abstracto", 1000))
+                                                               ~~~~~~~~^^^^^^^^^^^^^^^^^^^
+TypeError: Can't instantiate abstract class Servicio without an implementation for abstract methods 'calcular_costo_base', 'validar_parametros'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 76, in ejecutar
+    raise Software_FJError(f"Fallo inesperado en '{descripcion}'") from e
+Software_FJ.excepciones.ProgramaFJError: Fallo inesperado en 'Instanciar la clase abstracta Servicio'
+2026-11-12 16:32:15,951 - INFO - Op 29 terminada
+2026-11-12 16:32:15,951 - ERROR - Op 30: Fallo inesperado en 'Leer una reserva fuera de la lista'
+Traceback (most recent call last):
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 68, in ejecutar
+    resultado = operacion()
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 184, in <lambda>
+    ejecutar("Leer una reserva fuera de la lista", lambda: gestor.reservas[99])
+                                                           ~~~~~~~~~~~~~~~^^^^
+IndexError: tuple index out of range
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 76, in ejecutar
+    raise Software_FJError(f"Fallo inesperado en '{descripcion}'") from e
+Software_FJ.excepciones.ProgramaFJError: Fallo inesperado en 'Leer una reserva fuera de la lista'
+2026-11-12 16:32:15,951 - INFO - Op 30 terminada
+2026-11-12 16:32:15,951 - ERROR - Op 31: Fallo inesperado en 'Cálculo inconsistente: división entre cero'
+Traceback (most recent call last):
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 68, in ejecutar
+    resultado = operacion()
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 185, in <lambda>
+    ejecutar("Cálculo inconsistente: división entre cero", lambda: Decimal("100") / Decimal("0"))
+                                                                   ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~
+decimal.DivisionByZero: [<class 'decimal.DivisionByZero'>]
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "c:\Users\usuario\Downloads\Fase-4-Software-main\Fase-4-Software-main\colaborativo.py", line 76, in ejecutar
+    raise Software_FJError(f"Fallo inesperado en '{descripcion}'") from e
+Software_FJ.excepciones.ProgramaFJError: Fallo inesperado en 'Cálculo inconsistente: división entre cero'
+2026-11-12 16:32:15,952 - INFO - Op 31 terminada
+2026-11-12 16:32:15,953 - INFO - ===== Fin de la simulación: {'exitosas': 13, 'controladas': 14, 'graves': 4} =====
