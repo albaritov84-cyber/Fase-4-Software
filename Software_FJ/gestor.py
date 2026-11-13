@@ -1,60 +1,90 @@
 # Aporte Deisy Suescun
-from datetime import datetime
-from typing import callable, TypeVar
+# Software_FJ/gestor.py
 
-# Definimos variables de tipo genérico para las funciones
-T = TypeVar("T")
+import logging
 
-class Contador:
-    """Datos de la simulación."""
+from Software_FJ.modelos.entidad import (
+    DatosInvalidosError,
+    EntidadNoEncontradaError,
+    OperacionNoPermitidaError,
+    ReservaConflictoError,
+)
+from Software_FJ.modelos.cliente import Cliente
+from Software_FJ.modelos.reserva import Reserva
+from Software_FJ.servicios.base import Servicio
 
-    def __init__(self)-> None:
-        self.total: int = 0
-        self.exitos: int = 0
-        self.rechazos_esperados: int = 0
-        # Casos en los que el resultado no coincide con lo previcto.
-        self.discrepancias: int = 0
-def _f(día: int, hora: int = 0) -> datetime:
-    """Fecha de noviembre de 2026para reducir ruido en las opereciones."""
-    return datetime(2026, 11, día, hora)
-def _id(reserva: Reserva | None) -> int:
-    """Devuelve el ID de la reserva previa. Si no existe, lanza un error de forma controlada."""
-    if reserva is None:
-        raise OperacionNoPermitidaError("Paso omitido: La reserva previa no se creó.")
-    return reserva.id
-def _detalle(valor: object) -> str:
-    """Texto descifrable para mostrar el resultado de una operación."""
-    if isinstance(valor, (Entidad, Reserva)):
-        return valor.describir()
-    if valor is None:
-        return "operación completada."
-    return str(valor)
+log = logging.getLogger("Software_FJ")
 
-def ejecutar(
-    contador: Contador,
-    numero: int,
-    descripcion: str,
-    operacion: callable[[], T],
-    error_esperado: type[Fase4Error] | None = None,
-) -> T | None:
-    """Ejecuta una operación controlando sus resultados, excepciones y estadísticas."""
-    contador.total += 1
-    print(f"\n[Operación {numero}] {descripcion}")
+class GestorReservas:
+    def __init__(self):
+        self.reservas = []
+        self.clientes = []
+        self.servicios = []
+    @property
+    def clientes(self):
+        return tuple(self.clientes)
 
-    try:
-        resultado = operacion()
-    except Exception as ex:
-        if error_esperado and isinstance(ex, error_esperado):
-            contador.rechazos_esperados += 1
-            print(f"  -> Rechazo esperado: {_detalle(ex)}")
-            return None
-        else:
-            contador.discrepancias += 1
-            print(f"  -> [ERROR INESPERADO]: {_detalle(ex)}")
-            return None
-    else:
-        contador.exitos += 1
-        print(f"  -> Éxito: {_detalle(resultado)}")
-        return resultado
-    finally:
-        pass
+    @property
+    def servicios(self):
+        return tuple(self.servicios)
+    @property
+    def reservas(self):
+        return tuple(self.reservas)
+
+    def registrar_cliente(self, cliente):
+        if not isinstance(cliente, Cliente):
+            raise DatosInvalidosError("Solo se puede registrar objetos cliente.", detalle=type(cliente).__name__)
+        if any(c.documento == cliente.documento for c in self._clientes):
+            raise OperacionNoPermitidaError(f"ya existe el cliente con ese documento", detalle=cliente.documento)
+        self.clientes.append(cliente)
+        log.info(f"Cliente registrado: %s", cliente.describir())
+        return cliente
+    
+    def registrar_servicio(self, servicio):
+        if not isinstance(servicio, Servicio):
+            raise DatosInvalidosError("Solo se puede registrar objetos servicio.", detalle=type(servicio).__name__)
+        self.servicios.append(servicio)
+        log.info(f"Servicio registrado: %s", servicio.describir())
+        return servicio
+    @staticmethod
+    def _buscar_(lista, id_buscado, tipo):
+        for elemento in lista:
+            if elemento.id == id_buscado:
+                return elemento
+        raise EntidadNoEncontradaError(f"No se encontró {tipo} con id {id_buscado}.", detalle=id_buscado)
+    def buscar_cliente(self, id_cliente):
+        return self._buscar_(self.clientes, id_cliente, "cliente")
+
+    def buscar_servicio(self, id_servicio):
+        return self._buscar_(self.servicios, id_servicio, "servicio")
+
+    def buscar_reserva(self, id_reserva):
+        return self._buscar_(self.reservas, id_reserva, "reserva")
+
+    def crear_reserva(self, id_cliente, id_servicio, fecha_inicio, fecha_fin, horas):
+        cliente = self.buscar_cliente(id_cliente)
+        servicio = self.buscar_servicio(id_servicio)
+        if not servicio.disponible:
+            raise OperacionNoPermitidaError(f"El servicio {servicio.nombre} no está disponible para reservas.", detalle=servicio.nombre)
+        for r in self._reservas:
+            if r.cliente == cliente and r.servicio == servicio and r.estado!= Reserva.ESTADO_CANCELADA:
+                raise ReservaConflictoError(
+                    f"{cliente.nombre} ya tiene una reserva activa para el servicio {servicio.nombre}.", detalle=(r.id, id_servicio)
+                )
+        reserva = Reserva(cliente, servicio, fecha_inicio, fecha_fin, horas)
+        self.reservas.append(reserva)
+        log.info(f"Reserva creada: %s", reserva.describir())
+        return reserva
+    def confirmar_reserva(self, id_reserva):
+        reserva = self.buscar_reserva(id_reserva)
+        reserva.confirmar()
+        return reserva
+    def cancelar_reserva(self, id_reserva):
+        reserva = self.buscar_reserva(id_reserva)
+        reserva.cancelar()
+        return reserva
+    def procesar_reserva(self, id_reserva, con_iva=False, descuento=0.0):
+        reserva = self.buscar_reserva(id_reserva)
+        reserva.procesar(con_iva, descuento)
+        return reserva
+        
