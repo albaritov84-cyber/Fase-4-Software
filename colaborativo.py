@@ -16,13 +16,13 @@ import logging
 import sys
 from typing import TypeVar
  
-from Software_FJ.excepciones import (
-    DatosInvalidosError,
-    EntidadNoEncontradaError,
-    OperacionNoPermitidaError,
-    ParametroFaltanteError,
-    ReservaConflictoError,
-    ProgramaFJError as Software_FJError,
+from Software_FJ.excepciones import (       #lista de errores que el propio sistema sabe explicar 
+    DatosInvalidosError,                    #Error; el tado que se escribe no sirve 
+    EntidadNoEncontradaError,               #Error; buscaste algo que no exixtes 
+    OperacionNoPermitidaError,              #Error; No se puede hacer esa accion 
+    ParametroFaltanteError,                 #Error; falta un dato obligatorio 
+    ReservaConflictoError,                  #Error; la reserva choca con otra
+    ProgramaFJError as Software_FJError,    #Error general del sistema le ponemos un nombre corto 
 )
 from Software_FJ.gestor import GestorReservas
 from Software_FJ.modelos.cliente import Cliente
@@ -55,10 +55,11 @@ def configurar_log():
  
  
 def categoria(error):
-    for clase, nombre in CATEGORIAS.items():
-        if isinstance(error, clase):
-            return nombre
-    return "Error del sistema"
+ #Busca a que grupo pertenece el error para mostrar un nombre claro
+    for clase, nombre in CATEGORIAS.items():  #revisa uno por uno los tipos de error conocidos
+        if isinstance(error, clase):          #si el error es de ese tipo 
+            return nombre                     #devuelve el nombre
+    return "Error del sistema"                #si no coincide con ninguno, es un error general 
  
  
 def ejecutar(descripcion: str, operacion: Callable[[], T]):
@@ -93,18 +94,18 @@ def ejecutar(descripcion: str, operacion: Callable[[], T]):
  
 def main():
     try:
-        sys.stdout.reconfigure(encoding="utf-8")
-    except AttributeError:
-        pass
+        sys.stdout.reconfigure(encoding="utf-8")    #Ajusta la pantalla para que muestre bien las tildes
+    except AttributeError:                          #si la version de Python no permite ese ajuste
+        pass                                        #se sigue sin hacerlo 
  
-    configurar_log()
-    inicio = datetime.now()
-    log.info("===== Inicio de la simulación =====")
-    print("=== SIMULACIÓN SOFTWARE FJ (sin base de datos) ===\n")
+    configurar_log()            #Prepara el diario
+    inicio = datetime.now()     #Guarda la hora de inicio
+    log.info("===== Inicio de la simulación =====") #Anota el inicio en el diario
+    print("=== SIMULACIÓN SOFTWARE FJ (sin base de datos) ===\n") #Titulo en pantalla 
  
-    gestor = GestorReservas()
-    d = {}
-    facturado = [Decimal("0")]
+    gestor = GestorReservas()   #Crea el encargo que lleva todo (vacio al principio)
+    d = {}                      #Una libreria donde se guarda los clientes, servicios y reservas creados, con un nonbre corto 
+    facturado = [Decimal("0")]  #Lleva la cuenta del total cobrado; va en una lista para poder cambiarlo desde las funciones de abajo
  
     def alta_cliente(clave, crear):
         c = gestor.registrar_cliente(crear())
@@ -131,22 +132,23 @@ def main():
         return gestor.crear_reserva(d["maria"].id, d["asesoria"].id, 2)
  
     # ---------- Clientes (4 válidos, 4 inválidos) ----------
+ #Cada linea de "ejecuar" es una prueba independiente: si un falla, la sigueinte sigue igual
     ejecutar("Registrar cliente válido: Ana", lambda: alta_cliente(
-        "ana", lambda: Cliente("ana maria lopez", "1053123456", "ana@correo.com", "300 123 4567")))
+        "ana", lambda: Cliente("ana maria lopez", "1053123456", "ana@correo.com", "300 123 4567"))) #Datos correctos
     ejecutar("Registrar cliente válido: Carlos", lambda: alta_cliente(
-        "carlos", lambda: Cliente("carlos ruiz", "80123456", "carlos@correo.com", "3105556677")))
+        "carlos", lambda: Cliente("carlos ruiz", "80123456", "carlos@correo.com", "3105556677")))   #Datos correctos
     ejecutar("Registrar cliente válido: Luisa", lambda: alta_cliente(
-        "luisa", lambda: Cliente("luisa gomez", "1020304050", "luisa@correo.com", "320-111-2233")))
+        "luisa", lambda: Cliente("luisa gomez", "1020304050", "luisa@correo.com", "320-111-2233"))) #Telefono con guiones
     ejecutar("Registrar cliente válido: Maria", lambda: alta_cliente(
-        "maria", lambda: Cliente("maria torres", "52123456", "maria@correo.com", "3157778899")))
+        "maria", lambda: Cliente("maria torres", "52123456", "maria@correo.com", "3157778899")))    #Datos correctos
     ejecutar("Cliente con nombre demasiado corto", lambda: alta_cliente(
-        "x", lambda: Cliente("Al", "1234567", "al@correo.com", "3001112233")))
+        "x", lambda: Cliente("Al", "1234567", "al@correo.com", "3001112233")))                      #Nombre muy corto: debe fallar
     ejecutar("Cliente con correo mal escrito", lambda: alta_cliente(
-        "x", lambda: Cliente("Pedro Perez", "1234567", "pedro.correo.com", "3001112233")))
+        "x", lambda: Cliente("Pedro Perez", "1234567", "pedro.correo.com", "3001112233")))          #Le falta la @: debe fallar
     ejecutar("Cliente con documento con letras", lambda: alta_cliente(
-        "x", lambda: Cliente("Pedro Perez", "12AB567", "pedro@correo.com", "3001112233")))
+        "x", lambda: Cliente("Pedro Perez", "12AB567", "pedro@correo.com", "3001112233")))          #El documento tiene letras; debe fallar
     ejecutar("Cliente creado con datos incompletos", lambda: alta_cliente(
-        "x", lambda: Cliente.desde_diccionario({"nombre": "Pedro Perez"})))
+        "x", lambda: Cliente.desde_diccionario({"nombre": "Pedro Perez"})))                         #Falta casi todos los datos; debe fallar
  
     # ---------- Servicios (3 válidos, 4 inválidos) ----------
     ejecutar("Crear servicio válido: sala", lambda: alta_servicio(
@@ -204,8 +206,8 @@ def main():
     log.info("===== Fin de la simulación: %s =====", resumen)
  
  
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__": #Esto hace que el programa empiece solo si se ejecuta este archivo directamente 
+    main()                 #Arranca la simulacion 
         
 
 
