@@ -1,5 +1,5 @@
 # Simulación de operaciones de Software_FJ, sin base de datos.
-#
+#trabajo realizado por Santiago Rojas, Cristiam Lopez, Lorena Correa.
 # Ejecuta 31 operaciones válidas, inválidas y con fallos graves sobre un
 # GestorReservas que vive solo en memoria. Demuestra que:
 #   - las operaciones están aisladas: un error no detiene lo que sigue.
